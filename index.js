@@ -19,21 +19,26 @@ app.get('/new-route', (req, res) => {
   res.send("Hi i'm a new endpoint")
 })
 
+// escoger la cantidad que queremos crear de productos asignándole un número a un parámetro query
+
 app.get('/products', (req, res) => {
 
-  const products = [] // Creamos un array vacío para añadir los productos aleatorios que vamos a crear
+  const { size } = req.query
 
-  for (let index = 0; index < 100; index++) { // para ello generamos un loop con 100 iteraciones
-    // en el que le haremos push al array vacío de productos  con los productos aleatorios que creemos
-  products.push({
-    name: faker.commerce.productName(), // con faker.comerce.productName() generamos un nombre aleatorio de un porducto
-    price: Number(faker.commerce.price()), // con faker.comerce.price() generamos un precio aleatorio, como viene en string lo pasamos a número
-    image: faker.image.imageUrl() // de esta manera generamos la URL de una imagen aleatoria
-  })
+  const products = []
 
+  const limit = size || 10 // le asignamos a una variable llamada limit lo que nos pasen como valor
+  // del parámetro query size y si no pasan nada, como es null o undefined se va a almacenar el número 10
+
+    for (let index = 0; index < limit; index++) { // le pasamos la variable limit para que indique el límite de la cantidad a generar de objetos aleatorios
+      products.push({
+      name: faker.commerce.productName(),
+      price: Number(faker.commerce.price()),
+      image: faker.image.imageUrl()
+    })
   }
 
-  res.json(products) // devolvemos a la petición del usuario el array de productos
+  res.json(products) // enviamos como respuesta un tipo de dato json, y el dato son los productos que hemos generado anteriormente
 })
 
 app.get('/products/:id', (req, res) => {
