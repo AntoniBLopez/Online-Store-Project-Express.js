@@ -1,0 +1,17 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 2018
+  },
+  "extends": [
+    "eslint:recommended", // Traemos algunas recomendaciones del estandar general de eslint
+    "prettier" // Nos traemos a prettier
+  ],
+  "env": {
+    "es6": true, // Vamos a utitlizar el standart de ES6
+    "node": true,
+    "jest": true
+  },
+  "rules": {
+    "no-console": "warn"
+  }
+}
