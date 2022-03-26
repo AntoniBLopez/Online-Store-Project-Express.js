@@ -7,11 +7,18 @@ app.get('/', (req, res) => {
   res.send('Hello my server in express')
 })
 
+app.get('/home', (req, res) => {
+  res.json({
+    welcome: "Welcome to my online store",
+    access: "categories"
+  })
+})
+
 app.get('/new-route', (req, res) => {
   res.send("Hi i'm a new endpoint")
 })
 
-app.get('/products', (req, res) => { // Lo que normalmente esperamos de un método get y el path /products es una lista de productos ( con un array )
+app.get('/products', (req, res) => {
   res.json([
     {
       name: 'Product1',
@@ -25,61 +32,46 @@ app.get('/products', (req, res) => { // Lo que normalmente esperamos de un méto
 })
 
 app.get('/products/:id', (req, res) => {
-  const { id } = req.params // Envio una petición ( req ) de que quiero recibir el parámetro ( .params ) id ( .PARÁMETRO )
-  // En la línea de justo encima estoy usando la desestructuración de ES6
+  const { id } = req.params
 
-  res.json({ // añadimos el código de respuesta a la petición
-    id, // esto es igual a: id: id,
+  res.json({
+    id,
     name: 'Product2',
     price: 2000
   })
 })
 
+
+// Vamos a ver cómo obtener parámetros Query
+
+app.get('/users', (req, res) => { // como el parámetro Query es opcional no lo vamos a definir directamente en el PATH, lo vamos a definir como parámetro dentro de nuestro REQuest (petición/solicitud)
+  const { limit, offset } = req.query // en vez de decirles que solicitamos el parámetro por su id, le decimos que solicitamos el query ( duda/pregunta/interrogante ) por su id
+  // le añadimos limit y offset porque es la estratégia de paginación que quieren que tenga users, entonces los asignamos
+
+  // Como son opcionales debemos de hacer una validación con if por si no nos envían los parámetros limit & offset poder
+  // enviarle todos los datos de los usuarios sin la necesidad de paginar:
+  if (limit && offset) {
+    res.json({ // si vienen los parámetros le enviamos la respuesta con json
+      limit,
+      offset,
+    })
+  } else {
+    res.send('No hay parámetros') // recuerda que con send enviamos una respuesta "normal"
+  }
+})
+
 app.get('/categories/:categoryId/products/:productId', (req, res) => {
-  const { categoryId, productId } = req.params // recojemos los identificadores de los parámetros
+  const { categoryId, productId } = req.params
 
   res.json({
-    categoryId, // = categoryId: categoryId
-    productId, // = productId: productId
+    categoryId,
+    productId,
   })
-}) // lo que estamos haciendo es capturar los parámetros que vienen por URL y los estamos recogiendo desde nuestro programa y los imprimimos de retorno
-
+})
 
 // Reto: crear usuarios, carrito de compras, página de pagos ... ( Crear los endpoints de get que retorne un array de productos y el de detalle ( con su ID ) )
 
 const name1 = 'Toni'
-const name2 = 'Maria'
-const name3 = 'Ara'
-
-app.get('/users', (req, res) => {
-  res.json([
-    {
-      name: name1,
-      welcome: `Hola ${name1}`
-    },
-    {
-      name: name2,
-      welcome: `Hola ${name2}`
-    },
-    {
-      name: name3,
-      welcome: `Hola ${name3}`
-    }
-  ])
-})
-
-app.get('/users/:id', (req, res) => {
-
-  const { id } = req.params
-
-  res.json(
-    {
-      id,
-      name: name1,
-      welcome: `Hola ${name1}`
-    }
-  )
-})
 
 app.get('/users/:userId/shoppingCart', (req, res) => {
 
@@ -133,16 +125,6 @@ app.get('/users/:userId/paymentPage', (req, res) => {
       ]
     }
   ])
-})
-
-
-// creo nuevos endpoints ( routes ) de prueba:
-
-app.get('/home', (req, res) => {
-  res.json({
-    welcome: "Welcome to my online store",
-    access: "categories"
-  })
 })
 
 
