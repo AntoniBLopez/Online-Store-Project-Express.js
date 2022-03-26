@@ -1,4 +1,5 @@
 const express = require('express');
+const faker = require('faker');
 
 const app = express()
 const port = 3002
@@ -19,16 +20,20 @@ app.get('/new-route', (req, res) => {
 })
 
 app.get('/products', (req, res) => {
-  res.json([
-    {
-      name: 'Product1',
-      price: 1000
-    },
-    {
-      name: 'Product2',
-      price: 2000
-    }
-  ])
+
+  const products = [] // Creamos un array vacío para añadir los productos aleatorios que vamos a crear
+
+  for (let index = 0; index < 100; index++) { // para ello generamos un loop con 100 iteraciones
+    // en el que le haremos push al array vacío de productos  con los productos aleatorios que creemos
+  products.push({
+    name: faker.commerce.productName(), // con faker.comerce.productName() generamos un nombre aleatorio de un porducto
+    price: Number(faker.commerce.price()), // con faker.comerce.price() generamos un precio aleatorio, como viene en string lo pasamos a número
+    image: faker.image.imageUrl() // de esta manera generamos la URL de una imagen aleatoria
+  })
+
+  }
+
+  res.json(products) // devolvemos a la petición del usuario el array de productos
 })
 
 app.get('/products/:id', (req, res) => {
@@ -42,21 +47,18 @@ app.get('/products/:id', (req, res) => {
 })
 
 
-// Vamos a ver cómo obtener parámetros Query
+// Obtener parámetros Query
 
-app.get('/users', (req, res) => { // como el parámetro Query es opcional no lo vamos a definir directamente en el PATH, lo vamos a definir como parámetro dentro de nuestro REQuest (petición/solicitud)
-  const { limit, offset } = req.query // en vez de decirles que solicitamos el parámetro por su id, le decimos que solicitamos el query ( duda/pregunta/interrogante ) por su id
-  // le añadimos limit y offset porque es la estratégia de paginación que quieren que tenga users, entonces los asignamos
+app.get('/users', (req, res) => {
+  const { limit, offset } = req.query
 
-  // Como son opcionales debemos de hacer una validación con if por si no nos envían los parámetros limit & offset poder
-  // enviarle todos los datos de los usuarios sin la necesidad de paginar:
   if (limit && offset) {
-    res.json({ // si vienen los parámetros le enviamos la respuesta con json
+    res.json({
       limit,
       offset,
     })
   } else {
-    res.send('No hay parámetros') // recuerda que con send enviamos una respuesta "normal"
+    res.send('No hay parámetros')
   }
 })
 
@@ -69,7 +71,6 @@ app.get('/categories/:categoryId/products/:productId', (req, res) => {
   })
 })
 
-// Reto: crear usuarios, carrito de compras, página de pagos ... ( Crear los endpoints de get que retorne un array de productos y el de detalle ( con su ID ) )
 
 const name1 = 'Toni'
 
