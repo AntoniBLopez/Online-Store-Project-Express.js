@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@faker-js/faker": "^6.0.0",
     "eslint": "^8.11.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
@@ -19,7 +20,6 @@
     "prettier": "^2.6.1"
   },
   "dependencies": {
-    "express": "^4.17.3",
-    "faker": "^5.5.3"
+    "express": "^4.17.3"
   }
 }
