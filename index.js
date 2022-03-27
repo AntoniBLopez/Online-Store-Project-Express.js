@@ -5,7 +5,7 @@ const app = express()
 const port = 3002
 
 app.use(express.json()) // Esta línea de código nos sirve para tener un middleware, -->
-// Con este ajuste ya podemos recibir información de tipo json que nos envían por POST
+// Con este ajuste ya podemos recibir información de tipo json que nos envía el usuario
 
 app.get('/', (req, res) => {
   res.send('Hello, welcome to my server in express')

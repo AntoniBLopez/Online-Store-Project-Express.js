@@ -32,21 +32,31 @@ router.get('/:id', (req, res) => {
   })
 })
 
-router.post(('/'), (req, res) => { // .post sirve para crear algo a partir de una petición que nos hace el usuario
-  const body = req.body // Recogemos los datos de todo el body
-  // El body es donde estan todos los datos que nos están llegando desde Insomnia ( herramienta desde -->
-  // la que estamos simulando las peticiones del usuario )
+router.post('/', (req, res) => {
+  const body = req.body
 
-  res.json( // le respondemos con un .json
+  res.json(
     {
       message: "Creation",
-      data: body // le enviamos los datos que nos han llegado
+      data: body
     }
   )
 })
 
-// Para que nos funcione bien el .json que estamos respondiendo a la petición del usuario tenemos que -->
-// implementar un middleware ( producto intermedio ), para ello vamos a implementar un middleware nativo que tiene express -->
-// Lo hacemos desde el archivo en el que tenemos la app principal ( index.js )
+router.patch('/:id', (req, res) => { // lo usamos como el post porque también recibe un body pero -->
+  // tenemos que recibir un id ( el id del producto que el usuario quiere editar )
+
+  const { id } = req.params // obtenemos los parámetros
+
+  const body = req.body
+
+  res.json(// enviamos una respuesta con un tipo de dato json
+    {
+      message: "Update",
+      data: body, // le devolvemos el body que nos ha enviado ( los datos )
+      id, // le devolvemos el parámetro
+    }
+  )
+})
 
 module.exports = router
