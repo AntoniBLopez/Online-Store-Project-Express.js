@@ -1,5 +1,5 @@
 const express = require('express');
-const routerApi = require('./routes'); // al requerir una carpeta ya busca y añade directamente el
+const routerApi = require('./app/server'); // al requerir una carpeta ya busca y añade directamente el
 // archivo que tenga el nombre index.js dentro del directorio
 
 const app = express()
