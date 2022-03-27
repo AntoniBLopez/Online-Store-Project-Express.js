@@ -1,4 +1,4 @@
-const express = require('express'); // traemos el módulo expres para crear un .Router
+const express = require('express');
 
 
 const homeRouter = require('../routes/home.js');
@@ -8,11 +8,11 @@ const usersRouter = require('../routes/users.js');
 const categoriesRouter = require('../routes/categories.js');
 
 function routersApi(app) {
-  const router = express.Router() // Creamos el router
+  const router = express.Router()
 
-  app.use('/api/v1', router) // creamos un PATH global para todos los endpoints
+  app.use('/api/v1', router)
 
-  router.use('/home', homeRouter)// aquí ahora en vez de app usamos router y se les añade el PATH /api/v1
+  router.use('/home', homeRouter)
   router.use('/test', testRouter)
   router.use('/products', productsRouter)
   router.use('/users', usersRouter)
