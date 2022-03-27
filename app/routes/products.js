@@ -43,18 +43,32 @@ router.post('/', (req, res) => {
   )
 })
 
-router.patch('/:id', (req, res) => { // lo usamos como el post porque también recibe un body pero -->
-  // tenemos que recibir un id ( el id del producto que el usuario quiere editar )
+router.patch('/:id', (req, res) => {
 
-  const { id } = req.params // obtenemos los parámetros
+  const { id } = req.params
 
   const body = req.body
 
-  res.json(// enviamos una respuesta con un tipo de dato json
+  res.json(
     {
       message: "Update",
-      data: body, // le devolvemos el body que nos ha enviado ( los datos )
-      id, // le devolvemos el parámetro
+      data: body,
+      id,
+    }
+  )
+})
+
+router.delete('/:id', (req, res) => {
+
+  const { id } = req.params
+
+  // const body = req.body // aquí en delete no necesitamos añadir un cuerpo ( body ) -->
+  // Simplemente queremos mandarle un identificador y que lo elimine
+
+  res.json(
+    {
+      message: "Deleted",
+      id,
     }
   )
 })
