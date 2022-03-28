@@ -1,5 +1,3 @@
-// Solo voy a implementar los servicios modulares con los 2 get que tengo en este archivo para este ejemplo:
-
 const express = require('express');
 
 const ProductsService = require('../../services/products.service') // traigo la clase
@@ -23,33 +21,20 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
   const body = req.body
-  res.status(201).json(
-    {
-      message: "Creation",
-      data: body
-    }
-  )
+  const newProduct = service.create(body)
+  res.status(201).json(newProduct)
 })
 
 router.patch('/:id', (req, res) => {
   const { body, params: { id } } = req;
-  res.json(
-    {
-      message: "Update",
-      data: body,
-      id,
-    }
-  )
+  const product = service.update(id, body) // ejecutamos el método update pasandole sus respectivos parámetros
+  res.json(product)
 })
 
 router.delete('/:id', (req, res) => {
   const { id } = req.params
-  res.json(
-    {
-      message: "Deleted",
-      id,
-    }
-  )
+  const response = service.delete(id)
+  res.json(response)
 })
 
 module.exports = router

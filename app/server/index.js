@@ -1,11 +1,10 @@
 const express = require('express');
 
-
-const homeRouter = require('../routes/home.routes.js');
+const homeRouter = require('../routes/home.router.js');
 const testRouter = require('../routes/test/test.js');
-const productsRouter = require('../routes/products.routes.js');
-const usersRouter = require('../routes/users.routes.js');
-const categoriesRouter = require('../routes/categories.routes.js');
+const productsRouter = require('../routes/products.router.js');
+const usersRouter = require('../routes/users.router.js');
+const categoriesRouter = require('../routes/categories.router.js');
 
 function routersApi(app) {
   const router = express.Router()
