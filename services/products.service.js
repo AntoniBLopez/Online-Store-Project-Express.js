@@ -45,6 +45,7 @@ class ProductsService {
 // Los siguientes datos no tienen nada que ver con el asincronismo, son datos pasados:
 
   async findOne(id) { // Buscar solo uno
+    const name = this.getTotal() // generamos un error a propósito ( getTotal() no existe )
     return this.products.find(item => item.id === id) // llamo al array ejecutando el método buscar ( find ), y como parámetro le digo que si tenemos un elemento id que coincida con el id del producto ( No se cuál es su función )
   }
 

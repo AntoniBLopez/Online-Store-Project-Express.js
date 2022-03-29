@@ -13,10 +13,16 @@ router.get('/', async (req, res) => {
   res.json(productsList)
 })
 
-router.get('/:id', async (req, res) => {
-  const { id } = req.params
-  const product = await service.findOne(id)
-  res.json(product)
+// Para que funcione se debe de capturar el error de forma explícita
+router.get('/:id', async (req, res, next) => {
+  try {
+    const { id } = req.params
+    const product = await service.findOne(id)
+    res.json(product)
+  } catch (err) {
+    next(err) // aquí es donde lo hacemos de forma explícita, le decimos que
+    // ejecute los middlewares que tengamos de tipo error
+  }
 })
 
 router.post('/', async (req, res) => {
