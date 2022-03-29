@@ -1,39 +1,48 @@
 const express = require('express');
 
-const ProductsService = require('../../services/products.service') // traigo la clase
+const ProductsService = require('../../services/products.service')
 
-const service = new ProductsService() // Creo una instáncia de la clase
+const service = new ProductsService()
 
 const router = express.Router()
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
 
-  const productsList = service.find() // uso la instáncia y accedo al buscador que me retorna la lista de productos
+  const productsList = await service.find() // se ejecutará pasados los 5 segundos que he simulado en el archivo de service
 
   res.json(productsList)
 })
 
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
   const { id } = req.params
-  const product = service.findOne(id) // ejecuto la instáncia con su método findOne (buscar uno) y le paso el id que nos pasen en el endpoint
-  res.json(product) // imprimo el resultado del método findOne
-})
-
-router.post('/', (req, res) => {
-  const body = req.body
-  const newProduct = service.create(body)
-  res.status(201).json(newProduct)
-})
-
-router.patch('/:id', (req, res) => {
-  const { body, params: { id } } = req;
-  const product = service.update(id, body) // ejecutamos el método update pasandole sus respectivos parámetros
+  const product = await service.findOne(id)
   res.json(product)
 })
 
-router.delete('/:id', (req, res) => {
+router.post('/', async (req, res) => {
+  const body = req.body
+  const newProduct = await service.create(body)
+  res.status(201).json(newProduct)
+})
+
+router.patch('/:id', async (req, res) => {
+
+  try { // capturamos el error que nos pueda dar el codigo
+
+    const { body, params: { id } } = req;
+    const product = await service.update(id, body)
+    res.json(product)
+  } catch (error) { // si hay un error respondemos con un tipo de dato json con un status(404)
+
+    res.status(404).json({
+      message: error.message
+    })
+  }
+})
+
+router.delete('/:id', async (req, res) => {
   const { id } = req.params
-  const response = service.delete(id)
+  const response = await service.delete(id)
   res.json(response)
 })
 
