@@ -31,18 +31,15 @@ router.post('/', async (req, res) => {
   res.status(201).json(newProduct)
 })
 
-router.patch('/:id', async (req, res) => {
+router.patch('/:id', async (req, res, next) => {
 
   try { // capturamos el error que nos pueda dar el codigo
 
     const { body, params: { id } } = req;
     const product = await service.update(id, body)
     res.json(product)
-  } catch (error) { // si hay un error respondemos con un tipo de dato json con un status(404)
-
-    res.status(404).json({
-      message: error.message
-    })
+  } catch (error) { // si hay un error ejecutamos un middleware error
+    next(error)
   }
 })
 

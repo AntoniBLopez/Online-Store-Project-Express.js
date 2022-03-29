@@ -1,4 +1,5 @@
 const { faker } = require('@faker-js/faker');
+const boom = require('@hapi/boom')
 
 class ProductsService {
 
@@ -15,7 +16,8 @@ class ProductsService {
     id: faker.datatype.uuid(),
     name: faker.commerce.productName(),
     price: Number(faker.commerce.price()),
-    image: faker.image.imageUrl()
+    image: faker.image.imageUrl(),
+    isBlock: faker.datatype.boolean(), // generamos aleatoriamente un tipo de dato boolean (true or false)
     })
   }
   }
@@ -37,42 +39,49 @@ class ProductsService {
       setTimeout(() => {
 
         resolve(this.products) // en resolve le enviamos los datos que queremos devolver cuando se cumple la promesa
-      }, 5000); // esperar 5 segundos para ejecutar
+      }, 5000);
     })
   }
 
-
-// Los siguientes datos no tienen nada que ver con el asincronismo, son datos pasados:
-
   async findOne(id) { // Buscar solo uno
-    const name = this.getTotal() // generamos un error a propósito ( getTotal() no existe )
-    return this.products.find(item => item.id === id) // llamo al array ejecutando el método buscar ( find ), y como parámetro le digo que si tenemos un elemento id que coincida con el id del producto ( No se cuál es su función )
+    const product = this.products.find(item => item.id === id)
+
+    // Regla de negocio N.1:
+    if (!product) { // si el producto no existe lanzamos el error adecuado
+      throw boom.notFound("product not found")
+    }
+    // Regla de negocio N.2:
+    if (product.isBlock) { // si el producto está bloqueado no permitimos retornarlo
+      throw boom.conflict("product is block") // usamos el método conflict para que nos de el status code adecuado
+    }
+    return product
   }
 
   async update(id, changes) { // Actualizar
 
-    const index = this.products.findIndex(item => item.id === id) // el método .findIndex devuelve la posición en la que está el objeto
+    const index = this.products.findIndex(item => item.id === id)
 
-    if (index === -1) { // validamos si existe ( si .findIndex no encuentra el elemento nos va a devolver un -1 )
-      throw new Error('product not found')
+    if (index === -1) {
+      // throw new Error('esto es un error')
+      throw boom.notFound("product not found") // de esta manera a boom le podemos añadir el método
+      // que creamos correcto y lanza el status code que se ajusta al error de forma automática
     }
-    const product = this.products[index] // asignamos el producto deseado a una variable
-    this.products[index] = { // accedemos al objeto por su index y le aplicamos los cambios
-      ...product, // y le pasamos la vairable del producto deseado para que haga una copia
-      ...changes // con esto le decimos que aplique a la copia saolamente los cambios necesarios
-      // De esta manera estamos persistiendo la información que había antes y solo ajustamos la nueva
+    const product = this.products[index]
+    this.products[index] = {
+      ...product,
+      ...changes
     }
-    return this.products[index] // retornamos el objeto con su cambio
+    return this.products[index]
   }
 
   async delete(id) { // Eliminar
     const index = this.products.findIndex(item => item.id === id)
 
     if (index === -1) {
-      throw new Error('product not found')
+      throw boom.notFound("product not found")
     }
     this.products.splice(index, 1)
-    return { id } // le enviamos el id del producto eliminado
+    return { id }
   }
 }
 
