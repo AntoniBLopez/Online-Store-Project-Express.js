@@ -14,13 +14,28 @@ class UsersService {
     ]
   }
 
+  createShoppingCart({
+    userId,
+    name,
+    body
+  }) { // Crear
+    return [
+      {
+        userId,
+        name: name,
+        welcome: `Hola ${name}`,
+        products: body.products,
+        price: body.price,
+      }
+    ]
+  }
+
   find(userId, body) { // Buscar
     return [
       {
         name: 'Toni',
-        welcome: `Hola Toni`,
+        welcome: 'Hola Toni',
         userId,
-        tTotalPrice: body[0].price + body[1].price + body[2].price
       }
     ]
   }
