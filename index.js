@@ -5,7 +5,9 @@ const routerApi = require('./app/server');
 const { logErrors, errorHandler, boomErrorHandler } = require('./middlewares/error.handler')
 
 const app = express()
-const port = 3002
+
+// Esto es para que heroku inyecte la variable del puerto que genere para ejecutar nuestra app
+const port = process.env.PORT || 3000 // process.env.PORT le decimos que asigene el valor de la variable de entorno PORT y si no viene que use 3000
 
 app.use(express.json()) // Esta línea de código nos sirve para tener un middleware, -->
 // Con este ajuste (codigo) ya podemos recibir información de tipo json que nos envía el usuario
@@ -13,14 +15,14 @@ app.use(express.json()) // Esta línea de código nos sirve para tener un middle
 
 
 
-const whiteList = ['http://localhost:3002', "http://127.0.0.1:5500", 'https://myapp.com','http://localhost:5500'] // estos son los orígenes de los cuales sí quiero recibir peticiones
+const whiteList = ["http://127.0.0.1:5500", 'https://myapp.com','http://localhost:5500'] // estos son los orígenes de los cuales sí quiero recibir peticiones
 // Puedo añadir host locales o también dominios. Para que funcione debo de añadir la url del origen que está queriendo acceder a mi servidor
 
 const options = { // Para que funcione
 
   origin: (origin, cb) => {
 
-    if (whiteList.includes(origin) || !origin) {
+    if (whiteList.includes(origin) || !origin) { // con !origin indicamos que aceptamos el mismo puerto local que tenemos como origen
       cb(null, true) // aquí en el primer parámetro le digo que no hay ningun error, y en el segundo que el acceso está permitiro
     } else {
       cb(new Error('no está permitido'))
